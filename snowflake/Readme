@@ -3,9 +3,9 @@ This project moves the Gold Layer fact_sales table from a Delta Lakehouse into S
 
 
 ⚡ Features
-✅ Reads fact_sales Delta table from Gold Layer.
-✅ Converts column names to lowercase (Snowflake convention).
-✅ Exports data to CSV locally.
-✅ Uploads CSV to Snowflake Stage using PUT.
-✅ Uses COPY INTO to populate fact_sales table.
-✅ Validates load by querying into a Pandas DataFrame.
+Reads fact_sales Delta table from Gold Layer.
+Converts column names to lowercase (Snowflake convention).
+Exports data to CSV locally.
+Uploads CSV to Snowflake Stage using PUT.
+Uses COPY INTO to populate fact_sales table.
+Validates load by querying into a Pandas DataFrame.
