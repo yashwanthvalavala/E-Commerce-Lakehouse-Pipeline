@@ -24,6 +24,8 @@ Programming: Python, SQL, Jupyter Notebooks
 
 
 📸 Demo
+
+
 ![E-Commerce Flow](https://github.com/yashwanthvalavala/E-Commerce-Lakehouse-Pipeline/blob/main/architecture%20and%20demo/architecture.png)
 
 
