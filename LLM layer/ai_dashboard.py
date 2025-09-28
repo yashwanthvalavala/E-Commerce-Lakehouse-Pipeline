@@ -6,14 +6,14 @@ from groq import Groq
 import json
 import tempfile
 from weasyprint import HTML
-from streamlit_plotly_events import plotly_events  # For capturing click events
+from streamlit_plotly_events import plotly_events  
 
 # ---------------- Snowflake Connection ----------------
 def get_snowflake_connection():
     return snowflake.connector.connect(
-        user="yashwanth08",
-        password="Yashwanth_2005",
-        account="ap33012.ap-southeast-1",
+        user="xxxxxxx",
+        password="xxxxxxxxxxxx",
+        account="xxxxxxxxxx",
         warehouse="COMPUTE_WH",
         database="fact_sales_db",
         schema="public",
@@ -21,7 +21,7 @@ def get_snowflake_connection():
     )
 
 # ---------------- Groq API Setup ----------------
-client = Groq(api_key="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")
+client = Groq(api_key="gsk_juEeRPwBNz0tanikV8tsWGdy...........................")
 
 # ---------------- Dashboard Functions ----------------
 def get_dashboard_spec(prompt):
@@ -75,20 +75,20 @@ def plot_chart(df, chart_type, title):
     else:
         st.warning(f"Chart type {chart_type} not supported")
         return None
-    fig.update_layout(clickmode='event+select')  # Enable click events
+    fig.update_layout(clickmode='event+select')  
     return fig
 
 # ---------------- Streamlit UI ----------------
 st.set_page_config(layout="wide")
-st.markdown("<h1>📊 AI-Powered Interactive Dashboard</h1>", unsafe_allow_html=True)
+st.markdown("<h1> AI-Powered Interactive Dashboard</h1>", unsafe_allow_html=True)
 
-# ✅ Default message (so page is never blank)
+#  Default message (so page is never blank)
 st.info("Enter a query and click **Generate Dashboard** to begin.")
 
 user_prompt = st.text_input("Enter your dashboard query:")
 
 # Filters
-st.markdown("<h2>🔎 Filters</h2>", unsafe_allow_html=True)
+st.markdown("<h2> Filters</h2>", unsafe_allow_html=True)
 col1, col2 = st.columns(2)
 with col1:
     region_filter = st.selectbox("Select Region:", ["All", "North", "South", "East", "West"])
@@ -157,7 +157,7 @@ if st.button("Generate Dashboard") and user_prompt.strip():
                         chart_placeholders[chart_id].plotly_chart(fig, use_container_width=True)
 
         # ---------------- Export ----------------
-        st.markdown("<h2>💾 Export Dashboard</h2>", unsafe_allow_html=True)
+        st.markdown("<h2> Export Dashboard</h2>", unsafe_allow_html=True)
 
         if st.button("Export as HTML"):
             with tempfile.NamedTemporaryFile(delete=False, suffix=".html") as tmp:
@@ -188,4 +188,5 @@ if st.button("Generate Dashboard") and user_prompt.strip():
         conn.close()
 
     except Exception as e:
-        st.error(f"⚠️ Error: {e}")
+        st.error(f" Error: {e}")
+
