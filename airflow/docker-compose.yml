@@ -1,0 +1,79 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: airflow-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  spark:
+    image: bitnami/spark:3.5.1
+    container_name: spark
+    environment:
+      - SPARK_MODE=master
+    ports:
+      - "7077:7077"
+      - "8081:8081"
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./raw_data:/data
+
+  airflow-webserver:
+    build: .
+    image: custom-airflow:latest
+    container_name: airflow-webserver
+    depends_on:
+      - postgres
+      - spark
+    restart: always
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
+      AIRFLOW__CORE__LOAD_EXAMPLES: 'False'
+      AIRFLOW_UID: 50000
+    ports:
+      - "8086:8080"
+    volumes:
+      - "./dags:/opt/airflow/dags"
+      - "./raw_data:/opt/airflow/raw_data"
+      - "./bronze_layer:/opt/airflow/bronze_layer"
+      - "./silver_layer:/opt/airflow/silver_layer"
+      - "./Gold_layer:/opt/airflow/Gold_layer"
+      - "./logs:/opt/airflow/logs"
+      - "./plugins:/opt/airflow/plugins"
+    command: webserver
+
+  airflow-scheduler:
+    build: .
+    image: custom-airflow:latest
+    container_name: airflow-scheduler
+    depends_on:
+      - airflow-webserver
+      - postgres
+      - spark
+    restart: always
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
+      AIRFLOW__CORE__LOAD_EXAMPLES: 'False'
+      AIRFLOW_UID: 50000
+    volumes:
+      - "./dags:/opt/airflow/dags"
+      - "./raw_data:/opt/airflow/raw_data"
+      - "./bronze_layer:/opt/airflow/bronze_layer"
+      - "./silver_layer:/opt/airflow/silver_layer"
+      - "./Gold_layer:/opt/airflow/Gold_layer"
+      - "./logs:/opt/airflow/logs"
+      - "./plugins:/opt/airflow/plugins"
+    command: scheduler
+
+volumes:
+  postgres_data:
