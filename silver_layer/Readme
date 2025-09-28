@@ -22,22 +22,22 @@ Concatenates first_name and last_name → full_name.
 Removes duplicates based on customer_id.
 Adds surrogate key: customer_sk.
 
-📦 Products
 
+📦 Products
 Casts price → Double.
 Casts stock_quantity → Integer.
 Cleans last_updated timestamp.
 Removes duplicates by product_id.
 Adds surrogate key: product_sk.
 
-📑 Orders
 
+📑 Orders
 Converts order_date → Timestamp.
 Casts total_amount → Double.
 Removes duplicates by order_id.
 
-🚚 Deliveries
 
+🚚 Deliveries
 Converts delivery_date → Timestamp.
 Casts total_amount → Double.
 Removes duplicates by delivery_id.
