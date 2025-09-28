@@ -1,0 +1,20 @@
+🤖 LLM-Powered Analytics Layer
+This module integrates Groq LLMs, Snowflake, and Streamlit to create an AI-powered data analyst.
+Users can ask natural language questions, and the system generates SQL queries, runs them on Snowflake, and visualizes results with interactive charts.
+
+
+✨ Features
+🔍 Ask in plain English → Get Snowflake SQL queries automatically
+📊 Interactive charts (bar, line, pie) powered by Plotly
+🖱️ Clickable dashboards → drill down into details
+🎛️ Global filters for region & product search
+🔄 Dynamic reruns when you interact with charts
+🔐 Secure connection with Snowflake
+
+
+⚙️ Tech Stack
+🐍 Python
+🌐 Streamlit (frontend dashboard)
+🗄️ Snowflake (data warehouse)
+🧠 Groq LLM API (SQL + chart spec generator)
+📈 Plotly + streamlit-plotly-events (interactive charts)
