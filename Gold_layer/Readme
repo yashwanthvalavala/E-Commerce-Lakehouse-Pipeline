@@ -1,35 +1,96 @@
-This notebook implements the Gold layer transformations for an E‑Commerce Data Lakehouse ("E-Commerce Data Lakaehouse with AI‑Powered Self‑Healing Pipelines").
-
-High level flow:
-Load Silver Delta tables (customers, products, orders, deliveries).
-Build SCD (Type‑2 style) dimension tables for: dim_customers, dim_products, dim_orders, dim_deliveries. Each dim contains surrogate keys and SCD metadata (start_date, end_date, is_current, last_updated, ingestion_timestamp).
-Build an aggregated fact table fact_sales by joining/enriching orders, deliveries and dimension lookups, and write it to the Gold layer as a Delta table.
+🏆 Gold Layer – E-Commerce Data Lakehouse
+This notebook implements the Gold Layer transformations for the project:
+“E-Commerce Data Lakehouse with AI-Powered Self-Healing Pipelines” ✨
+The Gold Layer enriches curated Silver data into SCD-style dimensions and a Fact table that drives analytics, BI dashboards, and ML features.
 
 
-Major named outputs/tables created or used:
-dim_customer 
+🔄 High-Level Flow
+1️⃣ Load Silver Delta tables:
+customers, products, orders, deliveries
+
+
+2️⃣ Build Dimensions (SCD Type-2):
+dim_customers 👤
+dim_products 📦
+dim_orders 🧾
+dim_deliveries 🚚
+
+3️⃣ Enrich & Upsert with Delta MERGE
+Ensure dimensions stay up to date with slowly changing history
+
+
+4️⃣ Build Fact Table
+fact_sales 💰 by joining/enriching orders, deliveries & dimensions
+
+
+📂 Outputs / Tables Created
+Dimensions
 dim_customers
 dim_products
 dim_orders
 dim_deliveries
+Fact Table
 fact_sales
+All stored as Delta tables in the Gold layer.
 
 
-Build SCD‑style Dimensions (customers, products, orders, deliveries)
+🏗️ Building Dimensions (SCD Type-2)
+For each dimension:
+Partition by the business key (customer_id, product_id, etc.)
+Order rows by last_updated (DESC)
+Pick latest row → mark as is_current = True ✅
+Older rows → mark as is_current = False ❌
 
-For each dimension the code uses a Window.partitionBy(<business_key>).orderBy(last_updated.desc()) and computes row_number() to pick the latest row per business key.
-Adds SCD metadata columns: start_date, end_date (initially None), is_current (Y/N or True/False), ingestion_timestamp, and a surrogate key using monotonically_increasing_id() (e.g. customer_sk, product_sk).
-Writes the resulting dimension Delta dataset to the Gold folder (e.g. <base_gold_path>\\dim_products\\data).
-This pattern is visible for gold_dim_customers, gold_dim_products, gold_dim_orders, gold_dim_deliveries.
+
+✨ Add metadata:
+start_date, end_date
+is_current flag
+ingestion_timestamp
+Surrogate key: customer_sk, product_sk, etc.
+
+📌 Write to:
+<base_gold_path>/dim_<table_name>/data
 
 
-Enrichment & Upsert (deliveries example)
+⚡ Enrichment & Upsert (Delta MERGE)
+Example: Deliveries 🚚
+Deduplicate incoming rows → enriched_deliveries
+Use DeltaTable.merge():
+✅ If record unchanged → keep existing
+🔄 If updated → set old is_current = False & insert new version
+➕ Insert brand-new rows
+This ensures Type-2 history tracking across dimensions.
 
-The notebook shows usage of DeltaTable.merge() for SCD/upserts on the dim_deliveries dataset: deduplicate incoming rows, create enriched_deliveries, then DeltaTable.merge() to update existing records (cases for unchanged, update columns and set previous is_current flags, and insert new rows). Follow the same pattern for other dims if needed.
 
-Build fact_sales
-  
-The notebook constructs fact_sales by loading the Gold dimension datasets and performing lookups/joins against the orders/deliveries to produce a flattened fact table (the code computes total_amount, keeps transaction_id, payment method, delivery fields, and links to dimension keys). The notebook includes logic to:
-Write the fact_sales to a Delta location
-If there's a schema mismatch, remove the old folder and recreate it using .option("overwriteSchema", "true") and a CREATE TABLE IF NOT EXISTS fact_sales USING DELTA LOCATION '<path>' SQL step.
-The exact column list for the final fact_sales table is partially truncated in the notebook text I could inspect. However, the notebook includes logic to show printSchema(), count(), and null counts for validation. Use these to confirm the final schema after first run.
+📊 Building fact_sales
+Fact table = 🔗 link between Orders + Deliveries + Dimensions
+Joins orders & deliveries with dimension surrogate keys
+
+
+Keeps key fields like:
+transaction_id, customer_sk, product_sk, order_sk, delivery_sk
+total_amount, payment_method, delivery fields
+Supports BI tools & ML feature engineering
+
+
+📌 Write to:
+<base_gold_path>/fact_sales/data
+
+
+🛠️ If schema mismatch occurs:
+Old folder is dropped & recreated with:
+CREATE TABLE IF NOT EXISTS fact_sales 
+USING DELTA 
+LOCATION '<path>'
+With .option("overwriteSchema", "true")
+
+
+✅ Validation
+After writing, the notebook runs:
+.printSchema() → verify schema
+.count() → verify row counts
+Null checks → ensure data quality
+
+
+🚀 Next Steps
+📈 Connect Gold tables to Snowflake
