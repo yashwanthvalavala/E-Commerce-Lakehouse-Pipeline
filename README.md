@@ -4,11 +4,13 @@ This project implements the Bronze Layer of a Data Lakehouse pipeline for an E-C
 The script (autoloader.py) leverages Apache Spark Structured Streaming with Delta Lake to continuously ingest raw data from CSV files into a bronze layer, applying schema validation, timestamping, and minimal transformations.
 
 
+
 🛠️ Requirements
 Apache Spark 3.5+
 Delta Lake (io.delta:delta-spark_2.12:3.1.0)
 Python 3.8+
 Java JDK 8 or 11
+
 
 
 📊 Schemas Used
