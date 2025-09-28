@@ -1,0 +1,44 @@
+Silver Layer Transformations
+
+This project implements the Silver Layer of a Data Lakehouse pipeline for an E-Commerce Data Platform with AI-Powered Self-Healing Pipelines.
+The script (autoloader.py) reads curated Bronze Delta tables, applies cleaning, standardization, and transformation logic, and writes the results into the Silver Layer for downstream analytics, aggregations, and machine learning.
+
+
+⚡ Features
+
+Reads Bronze Layer Delta Tables into temporary views.\
+Cleans and standardizes data by converting types, removing duplicates, and handling timestamps.
+Adds metadata columns such as ingestion_timestamp.\
+Generates surrogate keys (customer_sk, product_sk) for dimension tables.\
+Writes output back into Silver Delta Tables with append mode.\
+Ensures schema enforcement and consistency for downstream layers (Gold / ML pipelines).
+
+
+📊 Transformations
+
+🧑 Customers
+Converts signup_date and last_updated into proper timestamp formats.\
+Concatenates first_name and last_name → full_name.\
+Removes duplicates based on customer_id.\
+Adds surrogate key: customer_sk.
+
+📦 Products
+
+Casts price → Double.
+
+Casts stock_quantity → Integer.\
+Cleans last_updated timestamp.\
+Removes duplicates by product_id.\
+Adds surrogate key: product_sk.
+
+📑 Orders
+
+Converts order_date → Timestamp.\
+Casts total_amount → Double.\
+Removes duplicates by order_id.
+
+🚚 Deliveries
+
+Converts delivery_date → Timestamp.\
+Casts total_amount → Double.\
+Removes duplicates by delivery_id.
