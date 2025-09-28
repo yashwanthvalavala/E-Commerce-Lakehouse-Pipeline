@@ -24,7 +24,7 @@ Programming: Python, SQL, Jupyter Notebooks
 
 
 📸 Demo
-![Alt Text for the Image](C:\Users\User\Desktop\E-Commerce Data Lakaehouse with AI-Powered Self-Healing Pipelines\architecture.png)
+
 
 
 
