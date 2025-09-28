@@ -1,0 +1,35 @@
+This notebook implements the Gold layer transformations for an E‑Commerce Data Lakehouse ("E-Commerce Data Lakaehouse with AI‑Powered Self‑Healing Pipelines").
+
+High level flow:
+Load Silver Delta tables (customers, products, orders, deliveries).
+Build SCD (Type‑2 style) dimension tables for: dim_customers, dim_products, dim_orders, dim_deliveries. Each dim contains surrogate keys and SCD metadata (start_date, end_date, is_current, last_updated, ingestion_timestamp).
+Build an aggregated fact table fact_sales by joining/enriching orders, deliveries and dimension lookups, and write it to the Gold layer as a Delta table.
+
+
+Major named outputs/tables created or used:
+dim_customer 
+dim_customers
+dim_products
+dim_orders
+dim_deliveries
+fact_sales
+
+
+Build SCD‑style Dimensions (customers, products, orders, deliveries)
+
+For each dimension the code uses a Window.partitionBy(<business_key>).orderBy(last_updated.desc()) and computes row_number() to pick the latest row per business key.
+Adds SCD metadata columns: start_date, end_date (initially None), is_current (Y/N or True/False), ingestion_timestamp, and a surrogate key using monotonically_increasing_id() (e.g. customer_sk, product_sk).
+Writes the resulting dimension Delta dataset to the Gold folder (e.g. <base_gold_path>\\dim_products\\data).
+This pattern is visible for gold_dim_customers, gold_dim_products, gold_dim_orders, gold_dim_deliveries.
+
+
+Enrichment & Upsert (deliveries example)
+
+The notebook shows usage of DeltaTable.merge() for SCD/upserts on the dim_deliveries dataset: deduplicate incoming rows, create enriched_deliveries, then DeltaTable.merge() to update existing records (cases for unchanged, update columns and set previous is_current flags, and insert new rows). Follow the same pattern for other dims if needed.
+
+Build fact_sales
+  
+The notebook constructs fact_sales by loading the Gold dimension datasets and performing lookups/joins against the orders/deliveries to produce a flattened fact table (the code computes total_amount, keeps transaction_id, payment method, delivery fields, and links to dimension keys). The notebook includes logic to:
+Write the fact_sales to a Delta location
+If there's a schema mismatch, remove the old folder and recreate it using .option("overwriteSchema", "true") and a CREATE TABLE IF NOT EXISTS fact_sales USING DELTA LOCATION '<path>' SQL step.
+The exact column list for the final fact_sales table is partially truncated in the notebook text I could inspect. However, the notebook includes logic to show printSchema(), count(), and null counts for validation. Use these to confirm the final schema after first run.
