@@ -4,22 +4,22 @@
 
 
 ✨ Key Features
-Bronze Layer → Raw ingestion (Autoloader)
-Silver Layer → Clean & transform with Delta
-Gold Layer → SCD Type-2 Dimensions + Fact Sales
-Unified fact_sales table for analytics
-Airflow DAG → Orchestrates Bronze → Silver → Gold ETL
-Snowflake → Cloud data warehouse for analytics & storage
-Groq LLM Layer → Natural language → SQL → Visualization
+Bronze Layer → Raw ingestion (Autoloader)\
+Silver Layer → Clean & transform with Delta\
+Gold Layer → SCD Type-2 Dimensions + Fact Sales\
+Unified fact_sales table for analytics\
+Airflow DAG → Orchestrates Bronze → Silver → Gold ETL\
+Snowflake → Cloud data warehouse for analytics & storage\
+Groq LLM Layer → Natural language → SQL → Visualization\
 Interactive Dashboard → Streamlit + Plotly with drilldowns
 
 
 ⚙️ Tech Stack
-Data Lakehouse: Delta Lake, Apache Spark
-Orchestration: Apache Airflow
-Storage/Warehouse: Snowflake
-AI/LLM: Groq API (llama-3.3-70b-versatile)
-Visualization: Streamlit + Plotly
+Data Lakehouse: Delta Lake, Apache Spark\
+Orchestration: Apache Airflow\
+Storage/Warehouse: Snowflake\
+AI/LLM: Groq API (llama-3.3-70b-versatile)\
+Visualization: Streamlit + Plotly\
 Programming: Python, SQL, Jupyter Notebooks
 
 
