@@ -7,16 +7,3 @@ Gold Layer → Aggregations & business-ready tables
 The pipeline is self-healing ready with error handling and retry logic built into Airflow.
 
 
-⚙️ How It Works
-
-🔶 Bronze Layer
-Runs autoloader.py
-Ingests raw data from source into the Bronze Delta tables
-
-🔷 Silver Layer
-Executes silver transformations.ipynb
-Cleans and transforms Bronze data into business-ready Silver tables
-
-🟡 Gold Layer
-Executes Gold_transformations.ipynb
-Creates aggregated fact/dimension tables for analytics & dashboards
