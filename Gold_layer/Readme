@@ -1,29 +1,27 @@
 🏆 Gold Layer – E-Commerce Data Lakehouse
-This notebook implements the Gold Layer transformations for the project:
-“E-Commerce Data Lakehouse with AI-Powered Self-Healing Pipelines” ✨
 The Gold Layer enriches curated Silver data into SCD-style dimensions and a Fact table that drives analytics, BI dashboards, and ML features.
 
 
-🔄 High-Level Flow
-1️⃣ Load Silver Delta tables:
+Project  Flow
+Load Silver Delta tables:
 customers, products, orders, deliveries
 
 
-2️⃣ Build Dimensions (SCD Type-2):
-dim_customers 👤
-dim_products 📦
-dim_orders 🧾
-dim_deliveries 🚚
+Build Dimensions (SCD Type-2):
+dim_customers 
+dim_products 
+dim_orders 
+dim_deliveries 
 
-3️⃣ Enrich & Upsert with Delta MERGE
+Upsert with Delta MERGE
 Ensure dimensions stay up to date with slowly changing history
 
 
-4️⃣ Build Fact Table
-fact_sales 💰 by joining/enriching orders, deliveries & dimensions
+Build Fact Table
+fact_sales by joining orders, deliveries & dimensions
 
 
-📂 Outputs / Tables Created
+Outputs / Tables Created
 Dimensions
 dim_customers
 dim_products
@@ -34,63 +32,6 @@ fact_sales
 All stored as Delta tables in the Gold layer.
 
 
-🏗️ Building Dimensions (SCD Type-2)
-For each dimension:
-Partition by the business key (customer_id, product_id, etc.)
-Order rows by last_updated (DESC)
-Pick latest row → mark as is_current = True ✅
-Older rows → mark as is_current = False ❌
 
-
-✨ Add metadata:
-start_date, end_date
-is_current flag
-ingestion_timestamp
-Surrogate key: customer_sk, product_sk, etc.
-
-📌 Write to:
-<base_gold_path>/dim_<table_name>/data
-
-
-⚡ Enrichment & Upsert (Delta MERGE)
-Example: Deliveries 🚚
-Deduplicate incoming rows → enriched_deliveries
-Use DeltaTable.merge():
-✅ If record unchanged → keep existing
-🔄 If updated → set old is_current = False & insert new version
-➕ Insert brand-new rows
-This ensures Type-2 history tracking across dimensions.
-
-
-📊 Building fact_sales
-Fact table = 🔗 link between Orders + Deliveries + Dimensions
-Joins orders & deliveries with dimension surrogate keys
-
-
-Keeps key fields like:
-transaction_id, customer_sk, product_sk, order_sk, delivery_sk
-total_amount, payment_method, delivery fields
-Supports BI tools & ML feature engineering
-
-
-📌 Write to:
-<base_gold_path>/fact_sales/data
-
-
-🛠️ If schema mismatch occurs:
-Old folder is dropped & recreated with:
-CREATE TABLE IF NOT EXISTS fact_sales 
-USING DELTA 
-LOCATION '<path>'
-With .option("overwriteSchema", "true")
-
-
-✅ Validation
-After writing, the notebook runs:
-.printSchema() → verify schema
-.count() → verify row counts
-Null checks → ensure data quality
-
-
-🚀 Next Steps
+Next Steps
 📈 Connect Gold tables to Snowflake
