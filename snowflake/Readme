@@ -2,7 +2,7 @@
 This project moves the Gold Layer fact_sales table from a Delta Lakehouse into Snowflake for analytics, BI dashboards, and downstream consumption.
 
 
-⚡ Features
+Features
 Reads fact_sales Delta table from Gold Layer.
 Converts column names to lowercase (Snowflake convention).
 Exports data to CSV locally.
