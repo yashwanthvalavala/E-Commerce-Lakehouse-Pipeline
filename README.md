@@ -1,10 +1,8 @@
-🛒 E-Commerce Data Lakehouse with AI-Powered Self-Healing Pipelines
+E-Commerce Data Lakehouse 
+I built this project to understand how production-grade ETL pipelines are designed beyond notebooks — especially around incremental loads, data quality, and orchestration failures. I intentionally designed Bronze–Silver–Gold layers to mirror real lakehouse patterns used in industry rather than a demo-style pipeline.
 
-🚀 End-to-end Data Engineering + AI Analytics project that builds a Lakehouse architecture for e-commerce data, with automated pipelines, scalable transformations, and an LLM-powered dashboard for natural language analytics.
-
-
-✨ Key Features
-Bronze Layer → Raw ingestion (Autoloader)\
+Key Features
+Bronze Layer → Raw ingestion (Autoloader)
 Silver Layer → Clean & transform with Delta\
 Gold Layer → SCD Type-2 Dimensions + Fact Sales\
 Unified fact_sales table for analytics\
@@ -14,7 +12,7 @@ Groq LLM Layer → Natural language → SQL → Visualization\
 Interactive Dashboard → Streamlit + Plotly with drilldowns
 
 
-⚙️ Tech Stack
+Tech Stack
 Data Lakehouse: Delta Lake, Apache Spark\
 Orchestration: Apache Airflow\
 Storage/Warehouse: Snowflake\
