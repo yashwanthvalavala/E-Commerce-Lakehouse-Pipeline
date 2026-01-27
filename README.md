@@ -1,5 +1,8 @@
-E-Commerce Data Lakehouse 
-I built this project to understand how production-grade ETL pipelines are designed beyond notebooks — especially around incremental loads, data quality, and orchestration failures. I intentionally designed Bronze–Silver–Gold layers to mirror real lakehouse patterns used in industry rather than a demo-style pipeline.
+E-Commerce Product Intelligence using Machine Learning & LLMs
+
+This project focuses on building a machine-learning–ready e-commerce intelligence system on large, real-world datasets. The goal was to transform raw, messy commerce data into structured features and insights that support analytics, predictive modeling, and natural-language querying — similar to problems solved in large-scale digital commerce platforms.
+
+Instead of a notebook-only workflow, the system was designed end-to-end to support data preprocessing, feature generation, and downstream ML/AI use cases.
 
 Key Features
 Bronze Layer → Raw ingestion (Autoloader)
